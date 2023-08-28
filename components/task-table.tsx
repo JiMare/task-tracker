@@ -16,6 +16,7 @@ import { getDate } from "@/utils/getDate";
 import { TrackingModal } from "./tracking-modal";
 import { AddNewTask } from "./add-new-task";
 import { getTasks } from "@/service/db";
+import { isToday } from "@/utils/isToday";
 
 export type Task = {
   id: number;
@@ -46,8 +47,6 @@ export const TaskTable: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [trackingTask, setTrackingTask] = useState<number | null>(null);
-
-  console.log(tasks)
 
   useEffect(() => {
     getTasks().then((response) => response && setTasks(response));
@@ -81,13 +80,15 @@ export const TaskTable: React.FC = () => {
         case "time":
           return <span>{task.time}</span>;
         case "tracking":
-          return (
+          return isToday(task.created) ? (
             <Button
               color="secondary"
               onClick={() => onOpenTrackingModal(task.id)}
             >
               Start
             </Button>
+          ) : (
+            <span>can no longer be tracked</span>
           );
 
         default:
@@ -128,6 +129,7 @@ export const TaskTable: React.FC = () => {
           isOpen={isOpen}
           onOpenChange={onOpenChange}
           task={tasks.find((task) => task.id === trackingTask)!}
+          setTasks={setTasks}
         />
       )}
     </>

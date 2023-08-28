@@ -8,26 +8,50 @@ import {
   ModalFooter,
   Button,
 } from "@nextui-org/react";
+import { formatTime } from "@/utils/formatTime";
+import { getNewTime } from "@/utils/getNewTime";
+import { getTasks, recordTime } from "@/service/db";
 
 type Props = {
   task: Task;
   isOpen: boolean;
   onOpenChange: () => void;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 };
 
 export const TrackingModal: React.FC<Props> = ({
   task,
   isOpen,
   onOpenChange,
+  setTasks,
 }) => {
   const [isTracking, setIsTracking] = useState(true);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+
+  const reset = () => {
+    setElapsedTime(0);
+    setIsTracking(true);
+  };
 
   useEffect(() => {
-    if (isOpen) setIsTracking(true);
+    if (isOpen) reset();
   }, [isOpen]);
 
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (isTracking) {
+      interval = setInterval(() => {
+        setElapsedTime((prevTime) => prevTime + 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [isTracking]);
+
   const onRecord = () => {
-    //TODO
+    recordTime(task.id, getNewTime(task.time, elapsedTime));
+    getTasks().then((response) => response && setTasks(response));
   };
 
   return (
@@ -46,6 +70,7 @@ export const TrackingModal: React.FC<Props> = ({
             </ModalHeader>
             <ModalBody>
               start: {new Date().getTime()}
+              <h1>{formatTime(elapsedTime)}</h1>
               <Button
                 color="secondary"
                 variant="flat"

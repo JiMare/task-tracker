@@ -10,8 +10,6 @@ import {
   Input,
 } from "@nextui-org/react";
 import { Task } from "./task-table";
-import { getDate } from "@/utils/getDate";
-import supabase from "@/service/supabase";
 import { addTask } from "@/service/db";
 
 type Props = {
@@ -28,27 +26,14 @@ export const AddNewTask: React.FC<Props> = ({ onAdd }) => {
 
   const onAddTask = async () => {
     addTask(name).then((response) => {
-      console.log(response);
       onAdd((prev) => [...prev, ...response]);
     });
-
-    //addTask(name)
-    //TODO odeslat na be a z odpovedi vzit id a cele uložit do stavu
-    /*   const newTask = {
-      id: 3,
-      name: name,
-      date: getDate().formattedDate,
-      day: getDate().dayOfWeek,
-      time: "00:00",
-      isTracking: false,
-    };
-    onAdd((prev) => [newTask, ...prev]); */
   };
 
   return (
     <>
       <Button color="secondary" variant="bordered" onClick={onOpen}>
-        Add new
+        Add new task
       </Button>
       <Modal isOpen={isOpen} backdrop="blur" onOpenChange={onOpenChange}>
         <ModalContent>
@@ -64,6 +49,8 @@ export const AddNewTask: React.FC<Props> = ({ onAdd }) => {
               <ModalFooter>
                 {name && (
                   <Button
+                    color="secondary"
+                    variant="bordered"
                     onClick={() => {
                       onAddTask();
                       onClose();

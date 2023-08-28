@@ -16,3 +16,14 @@ export const addTask = async (name: string) => {
   }
   return data;
 };
+
+export const recordTime = async (taskId: number, newTime: string) => {
+  const { error } = await supabase
+    .from("tasks")
+    .update({ time: newTime })
+    .eq("id", taskId);
+
+  if (error) {
+    throw error;
+  }
+};
