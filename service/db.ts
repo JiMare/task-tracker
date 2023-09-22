@@ -1,7 +1,23 @@
 import supabase from "./supabase";
+import { DateTime } from "luxon";
 
-export const getTasks = async () => {
-  const { data } = await supabase.from("tasks").select("*");
+const today = DateTime.now().toISODate();
+
+export const getTodaysTasks = async () => {
+  const { data } = await supabase
+    .from("tasks")
+    .select("*")
+    .gte("created", `${today}T00:00:00Z`)
+    .lte("created", `${today}T23:59:59Z`)
+    .order("created", { ascending: false });
+  return data;
+};
+
+export const getHistoryTasks = async () => {
+  const { data } = await supabase
+    .from("tasks")
+    .select("*")
+    .order("created", { ascending: false });
   return data;
 };
 

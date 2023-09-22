@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Task } from "./task-table";
 import {
   Modal,
   ModalContent,
@@ -10,7 +9,9 @@ import {
 } from "@nextui-org/react";
 import { formatTime } from "@/utils/formatTime";
 import { getNewTime } from "@/utils/getNewTime";
-import { getTasks, recordTime } from "@/service/db";
+import { getTodaysTasks, recordTime } from "@/service/db";
+import { DateTime } from "luxon";
+import { Task } from "@/types";
 
 type Props = {
   task: Task;
@@ -27,10 +28,12 @@ export const TrackingModal: React.FC<Props> = ({
 }) => {
   const [isTracking, setIsTracking] = useState(true);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [start, setStart] = useState(DateTime.now());
 
   const reset = () => {
     setElapsedTime(0);
     setIsTracking(true);
+    setStart(DateTime.now());
   };
 
   useEffect(() => {
@@ -51,7 +54,7 @@ export const TrackingModal: React.FC<Props> = ({
 
   const onRecord = () => {
     recordTime(task.id, getNewTime(task.time, elapsedTime));
-    getTasks().then((response) => response && setTasks(response));
+    getTodaysTasks().then((response) => response && setTasks(response));
   };
 
   return (
@@ -69,7 +72,7 @@ export const TrackingModal: React.FC<Props> = ({
               {task.name} {isTracking}
             </ModalHeader>
             <ModalBody>
-              start: {new Date().getTime()}
+              Start tracking: {start.toFormat('HH:mm:ss')}
               <h1>{formatTime(elapsedTime)}</h1>
               <Button
                 color="secondary"

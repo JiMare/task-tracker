@@ -9,7 +9,7 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { Task } from "./task-table";
+import { Task } from "@/types";
 import { addTask } from "@/service/db";
 
 type Props = {
@@ -26,7 +26,7 @@ export const AddNewTask: React.FC<Props> = ({ onAdd }) => {
 
   const onAddTask = async () => {
     addTask(name).then((response) => {
-      onAdd((prev) => [...prev, ...response]);
+      onAdd((prev) => [...response, ...prev]);
     });
   };
 

@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export const getDate = (isodate: string) => {
   const date = new Date(isodate);
   const dayNames = [
@@ -19,4 +21,9 @@ export const getDate = (isodate: string) => {
     formattedDate: `${day}. ${month}. ${year}`,
     dayOfWeek,
   };
+};
+
+export const getDayOfWeek = (dateString: string): string => {
+  const isoDate = DateTime.fromFormat(dateString, "dd. LL. yyyy").toISODate()!;
+  return DateTime.fromISO(isoDate).toFormat("EEEE");
 };

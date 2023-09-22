@@ -15,25 +15,10 @@ import { Button } from "@nextui-org/button";
 import { getDate } from "@/utils/getDate";
 import { TrackingModal } from "./tracking-modal";
 import { AddNewTask } from "./add-new-task";
-import { getTasks } from "@/service/db";
+import { getTodaysTasks } from "@/service/db";
 import { isToday } from "@/utils/isToday";
-
-export type Task = {
-  id: number;
-  name: string;
-  created: string;
-  time: string;
-};
-
-const dayColorMap: Record<string, string> = {
-  Sunday: "bg-amber-200",
-  Monday: "bg-red-500",
-  Tuesday: "bg-sky-700",
-  Wednesday: "bg-cyan-300",
-  Thursday: "bg-amber-700",
-  Friday: "bg-green-600",
-  Saturday: "bg-fuchsia-600",
-};
+import { Task } from "@/types";
+import { dayColorMap } from "@/utils/dayColorMap";
 
 const columns = [
   { name: "Task name", uid: "name" },
@@ -49,7 +34,7 @@ export const TaskTable: React.FC = () => {
   const [trackingTask, setTrackingTask] = useState<number | null>(null);
 
   useEffect(() => {
-    getTasks().then((response) => response && setTasks(response));
+    getTodaysTasks().then((response) => response && setTasks(response));
   }, []);
 
   const onOpenTrackingModal = (id: number) => {
@@ -114,7 +99,7 @@ export const TaskTable: React.FC = () => {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={tasks.reverse()}>
+        <TableBody emptyContent={"No rows to display."} items={tasks}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

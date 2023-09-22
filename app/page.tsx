@@ -1,6 +1,7 @@
-import { title } from "@/components/primitives";
+import { subtitle, title } from "@/components/primitives";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { TaskTable } from "@/components/task-table";
+import { HistoryTable } from "@/components/history-table";
 
 export default function Home() {
   return (
@@ -10,6 +11,8 @@ export default function Home() {
         <ThemeSwitch />
       </div>
       <TaskTable />
+      <h2 className={subtitle()}>Tasks history</h2>
+      <HistoryTable />
     </>
   );
 }
