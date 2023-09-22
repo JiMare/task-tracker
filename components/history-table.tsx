@@ -14,13 +14,22 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import { dayColorMap } from "@/utils/dayColorMap";
 
 const columns = [
   { name: "Task name", uid: "name" },
   { name: "Recorded time", uid: "time" },
   { name: "Actions", uid: "actions" },
 ];
+
+const dayColorMap: Record<string, string> = {
+  Sunday: "bg-amber-200",
+  Monday: "bg-red-500",
+  Tuesday: "bg-sky-700",
+  Wednesday: "bg-cyan-300",
+  Thursday: "bg-amber-700",
+  Friday: "bg-green-600",
+  Saturday: "bg-fuchsia-600",
+};
 
 export const HistoryTable = () => {
   const [tasks, setTasks] = useState<Task[]>([]);

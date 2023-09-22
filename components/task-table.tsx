@@ -18,7 +18,6 @@ import { AddNewTask } from "./add-new-task";
 import { getTodaysTasks } from "@/service/db";
 import { isToday } from "@/utils/isToday";
 import { Task } from "@/types";
-import { dayColorMap } from "@/utils/dayColorMap";
 
 const columns = [
   { name: "Task name", uid: "name" },
@@ -27,6 +26,16 @@ const columns = [
   { name: "Time-tracking", uid: "tracking" },
   { name: "Actions", uid: "actions" },
 ];
+
+const dayColorMap: Record<string, string> = {
+  Sunday: "bg-amber-200",
+  Monday: "bg-red-500",
+  Tuesday: "bg-sky-700",
+  Wednesday: "bg-cyan-300",
+  Thursday: "bg-amber-700",
+  Friday: "bg-green-600",
+  Saturday: "bg-fuchsia-600",
+};
 
 export const TaskTable: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
